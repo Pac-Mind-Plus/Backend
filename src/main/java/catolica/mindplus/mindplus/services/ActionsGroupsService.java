@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
-import catolica.mindplus.mindplus.entity.ActionsGroups;
+import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
 
 @Service
@@ -18,7 +18,7 @@ public class ActionsGroupsService {
     @Autowired
     ActionsGroupsRepository repository;
 
-    public ActionsGroups getActionGroupById(int id) {
+    public ActionGroups getActionGroupById(int id) {
         try {
             return repository.findById(id).get();
         } catch (NoSuchElementException e) {
@@ -26,25 +26,25 @@ public class ActionsGroupsService {
         }
     }
 
-    public List<ActionsGroups> getAllActionGroups(int page, int pageSize) {
+    public List<ActionGroups> getAllActionGroups(int page, int pageSize) {
         PageRequest pageable = PageRequest.of(page, pageSize);
-        Page<ActionsGroups> actionGroups = this.repository.findAll(pageable);
+        Page<ActionGroups> actionGroups = this.repository.findAll(pageable);
 
         return actionGroups.toList();
     }
 
-    public ActionsGroups insert(ActionsGroupsFormDto actionGroupForm) {
-        var actionGroup = new ActionsGroups();
+    public ActionGroups insert(ActionsGroupsFormDto actionGroupForm) {
+        var actionGroup = new ActionGroups();
         actionGroup.setDescription(actionGroupForm.getDescription());
 
         return repository.save(actionGroup);
     }
 
-    public ActionsGroups update(int id, ActionsGroupsFormDto actionGroupForm) {
+    public ActionGroups update(int id, ActionsGroupsFormDto actionGroupForm) {
         var oldActionGroup = this.getActionGroupById(id);
 
         if (oldActionGroup != null) {
-            var actionGroup = new ActionsGroups();
+            var actionGroup = new ActionGroups();
             actionGroup.setDescription(actionGroupForm.getDescription());
             actionGroup.setId(id);
 
@@ -54,7 +54,7 @@ public class ActionsGroupsService {
         throw new NoSuchElementException();
     }
 
-    public ActionsGroups deleteActionGroupById(int id) {
+    public ActionGroups deleteActionGroupById(int id) {
         var oldActionGroup = this.getActionGroupById(id);
 
         if (oldActionGroup != null) {

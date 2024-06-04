@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
 import catolica.mindplus.mindplus.dtos.ResultContainer;
-import catolica.mindplus.mindplus.entity.ActionsGroups;
+import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.services.ActionsGroupsService;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -29,9 +29,9 @@ public class ActionGroupsController {
     ActionsGroupsService actionsGroupsService;
 
     @GetMapping()
-    public ResultContainer<List<ActionsGroups>> getAllActionGroups(@RequestParam("page") int page,
+    public ResultContainer<List<ActionGroups>> getAllActionGroups(@RequestParam("page") int page,
             @RequestParam("pageSize") int pageSize) {
-        var result = new ResultContainer<List<ActionsGroups>>(null, new ArrayList<String>());
+        var result = new ResultContainer<List<ActionGroups>>(null, new ArrayList<String>());
 
         var groups = actionsGroupsService.getAllActionGroups(page, pageSize);
 
@@ -41,8 +41,8 @@ public class ActionGroupsController {
     }
 
     @GetMapping("{id}")
-    public ResultContainer<ActionsGroups> getActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
-        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+    public ResultContainer<ActionGroups> getActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
+        var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
         var group = actionsGroupsService.getActionGroupById(id);
 
         result.setResult(group);
@@ -57,11 +57,11 @@ public class ActionGroupsController {
     }
 
     @DeleteMapping("{id}")
-    public ResultContainer<ActionsGroups> deleteActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
-        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+    public ResultContainer<ActionGroups> deleteActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
+        var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
 
         try {
-            ActionsGroups group = actionsGroupsService.deleteActionGroupById(id);
+            ActionGroups group = actionsGroupsService.deleteActionGroupById(id);
             result.setResult(group);
         } catch (NoSuchElementException e) {
             response.setStatus(404);
@@ -71,12 +71,12 @@ public class ActionGroupsController {
     }
 
     @PutMapping("{id}")
-    public ResultContainer<ActionsGroups> putActionGroup(@PathVariable("id") int id, @RequestBody ActionsGroupsFormDto actionGroups,
+    public ResultContainer<ActionGroups> putActionGroup(@PathVariable("id") int id, @RequestBody ActionsGroupsFormDto actionGroups,
             HttpServletResponse response) {
-        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+        var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
 
         try {
-            ActionsGroups group = actionsGroupsService.update(id, actionGroups);
+            ActionGroups group = actionsGroupsService.update(id, actionGroups);
             result.setResult(group);
         } catch (NoSuchElementException e) {
             response.setStatus(404);
