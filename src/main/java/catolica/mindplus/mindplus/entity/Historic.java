@@ -32,6 +32,10 @@ public class Historic {
     @JoinColumn(name = "actions_group_id", nullable = false)
     ActionGroups actionGroup;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User owner;
+
 	public int getId() {
 		return id;
 	}

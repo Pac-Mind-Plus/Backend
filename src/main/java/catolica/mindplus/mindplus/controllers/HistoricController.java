@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
 import catolica.mindplus.mindplus.dtos.HistoricFormDto;
 import catolica.mindplus.mindplus.dtos.ResultContainer;
-import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.services.ActionsGroupsService;
 import catolica.mindplus.mindplus.services.HistoricService;

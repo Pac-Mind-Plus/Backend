@@ -12,12 +12,26 @@ import org.springframework.stereotype.Service;
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
 import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
+import catolica.mindplus.mindplus.repositories.UsersRepository;
 
 @Service
 public class ActionsGroupsService {
 
     @Autowired
+    UsersRepository userRepository;
+
+    @Autowired
     ActionsGroupsRepository repository;
+
+    public ActionGroups findActionGroupByUser(int userId, int id) throws NoSuchElementException {
+        var user = userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            return repository.findByOwnerAndId(user.get(), id).get();
+        }
+
+        throw new NoSuchElementException();
+    }
 
     public Optional<ActionGroups> getActionGroupById(int id) {
         return repository.findById(id);
