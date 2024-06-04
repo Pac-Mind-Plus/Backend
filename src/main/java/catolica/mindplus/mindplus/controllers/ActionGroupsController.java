@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
+import catolica.mindplus.mindplus.dtos.HistoricFormDto;
 import catolica.mindplus.mindplus.dtos.ResultContainer;
 import catolica.mindplus.mindplus.entity.ActionGroups;
+import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.services.ActionsGroupsService;
+import catolica.mindplus.mindplus.services.HistoricService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -45,9 +48,9 @@ public class ActionGroupsController {
         var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
         var group = actionsGroupsService.getActionGroupById(id);
 
-        result.setResult(group);
-
-        if (result == null) {
+        if (group.isPresent()) {
+            result.setResult(group.get());
+        } else {
             response.setStatus(404);
 
             result.addErrors("Not Found");
@@ -57,7 +60,8 @@ public class ActionGroupsController {
     }
 
     @DeleteMapping("{id}")
-    public ResultContainer<ActionGroups> deleteActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
+    public ResultContainer<ActionGroups> deleteActionGroupById(@PathVariable("id") int id,
+            HttpServletResponse response) {
         var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
 
         try {
@@ -71,7 +75,8 @@ public class ActionGroupsController {
     }
 
     @PutMapping("{id}")
-    public ResultContainer<ActionGroups> putActionGroup(@PathVariable("id") int id, @RequestBody ActionsGroupsFormDto actionGroups,
+    public ResultContainer<ActionGroups> putActionGroup(@PathVariable("id") int id,
+            @RequestBody ActionsGroupsFormDto actionGroups,
             HttpServletResponse response) {
         var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
 
@@ -81,15 +86,19 @@ public class ActionGroupsController {
         } catch (NoSuchElementException e) {
             response.setStatus(404);
             result.addErrors("Not Found");
-            return null;
+            return result;
         }
 
         return result;
     }
 
     @PostMapping()
-    public void insertActionGroup(@RequestBody ActionsGroupsFormDto actionGroups) {
-        actionsGroupsService.insert(actionGroups);
-    }
+    public ResultContainer<ActionGroups> insertActionGroup(@RequestBody ActionsGroupsFormDto actionGroups) {
+        var result = new ResultContainer<ActionGroups>(null, new ArrayList<String>());
 
+        var group = actionsGroupsService.insert(actionGroups);
+        result.setResult(group);
+
+        return result; 
+    }
 }

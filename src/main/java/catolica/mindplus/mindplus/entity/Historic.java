@@ -31,4 +31,44 @@ public class Historic {
     @ManyToOne
     @JoinColumn(name = "actions_group_id", nullable = false)
     ActionGroups actionGroup;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public String getReward() {
+		return reward;
+	}
+
+	public void setReward(String reward) {
+		this.reward = reward;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public ActionGroups getActionGroup() {
+		return actionGroup;
+	}
+
+	public void setActionGroup(ActionGroups actionGroup) {
+		this.actionGroup = actionGroup;
+	}
 }

@@ -2,6 +2,7 @@ package catolica.mindplus.mindplus.services;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,12 +19,8 @@ public class ActionsGroupsService {
     @Autowired
     ActionsGroupsRepository repository;
 
-    public ActionGroups getActionGroupById(int id) {
-        try {
-            return repository.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+    public Optional<ActionGroups> getActionGroupById(int id) {
+        return repository.findById(id);
     }
 
     public List<ActionGroups> getAllActionGroups(int page, int pageSize) {
@@ -43,12 +40,12 @@ public class ActionsGroupsService {
     public ActionGroups update(int id, ActionsGroupsFormDto actionGroupForm) {
         var oldActionGroup = this.getActionGroupById(id);
 
-        if (oldActionGroup != null) {
+        if (oldActionGroup.isPresent()) {
             var actionGroup = new ActionGroups();
             actionGroup.setDescription(actionGroupForm.getDescription());
             actionGroup.setId(id);
 
-            repository.save(actionGroup);
+            return repository.save(actionGroup);
         }
 
         throw new NoSuchElementException();
@@ -57,9 +54,9 @@ public class ActionsGroupsService {
     public ActionGroups deleteActionGroupById(int id) {
         var oldActionGroup = this.getActionGroupById(id);
 
-        if (oldActionGroup != null) {
+        if (oldActionGroup.isPresent()) {
             repository.deleteById(id);
-            return oldActionGroup;
+            return oldActionGroup.get();
         }
 
         throw new NoSuchElementException();

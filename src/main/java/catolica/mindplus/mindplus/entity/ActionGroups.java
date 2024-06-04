@@ -22,7 +22,7 @@ public class ActionGroups {
     private String description;
 
     @OneToMany(mappedBy = "actionGroup")
-    private Set<Historic> items;
+    private Set<Historic> historics;
 
 	public int getId() {
 		return id;
