@@ -1,5 +1,6 @@
 package catolica.mindplus.mindplus.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
+import catolica.mindplus.mindplus.dtos.ResultContainer;
 import catolica.mindplus.mindplus.entity.ActionsGroups;
 import catolica.mindplus.mindplus.services.ActionsGroupsService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,43 +28,59 @@ public class ActionGroupsController {
     @Autowired
     ActionsGroupsService actionsGroupsService;
 
-     @GetMapping()
-     public List<ActionsGroups> getAllActionGroups(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
-         return actionsGroupsService.getAllActionGroups(page, pageSize);
-     }
+    @GetMapping()
+    public ResultContainer<List<ActionsGroups>> getAllActionGroups(@RequestParam("page") int page,
+            @RequestParam("pageSize") int pageSize) {
+        var result = new ResultContainer<List<ActionsGroups>>(null, new ArrayList<String>());
+
+        var groups = actionsGroupsService.getAllActionGroups(page, pageSize);
+
+        result.setResult(groups);
+
+        return result;
+    }
 
     @GetMapping("{id}")
-    public ActionsGroups getActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
-        var result = actionsGroupsService.getActionGroupById(id);
+    public ResultContainer<ActionsGroups> getActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
+        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+        var group = actionsGroupsService.getActionGroupById(id);
+
+        result.setResult(group);
 
         if (result == null) {
             response.setStatus(404);
+
+            result.addErrors("Not Found");
         }
 
         return result;
     }
 
     @DeleteMapping("{id}")
-    public ActionsGroups deleteActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
-        ActionsGroups result;
+    public ResultContainer<ActionsGroups> deleteActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
+        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+
         try {
-            result = actionsGroupsService.deleteActionGroupById(id);
+            ActionsGroups group = actionsGroupsService.deleteActionGroupById(id);
+            result.setResult(group);
         } catch (NoSuchElementException e) {
             response.setStatus(404);
-            return null;
         }
 
         return result;
     }
 
     @PutMapping("{id}")
-    public ActionsGroups putActionGroup(@PathVariable("id") int id, @RequestBody ActionsGroupsFormDto actionGroups,
+    public ResultContainer<ActionsGroups> putActionGroup(@PathVariable("id") int id, @RequestBody ActionsGroupsFormDto actionGroups,
             HttpServletResponse response) {
-        ActionsGroups result;
+        var result = new ResultContainer<ActionsGroups>(null, new ArrayList<String>());
+
         try {
-            result = actionsGroupsService.update(id, actionGroups);
+            ActionsGroups group = actionsGroupsService.update(id, actionGroups);
+            result.setResult(group);
         } catch (NoSuchElementException e) {
             response.setStatus(404);
+            result.addErrors("Not Found");
             return null;
         }
 
@@ -70,7 +88,7 @@ public class ActionGroupsController {
     }
 
     @PostMapping()
-    public void saveOrUpdate(@RequestBody ActionsGroupsFormDto actionGroups) {
+    public void insertActionGroup(@RequestBody ActionsGroupsFormDto actionGroups) {
         actionsGroupsService.insert(actionGroups);
     }
 
