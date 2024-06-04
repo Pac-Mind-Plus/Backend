@@ -75,4 +75,8 @@ public class Historic {
 	public void setActionGroup(ActionGroups actionGroup) {
 		this.actionGroup = actionGroup;
 	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 }

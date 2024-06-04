@@ -16,32 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
-import catolica.mindplus.mindplus.dtos.HistoricFormDto;
 import catolica.mindplus.mindplus.dtos.ResultContainer;
 import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.services.ActionsGroupsService;
-import catolica.mindplus.mindplus.services.HistoricService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "/actiongroups")
 public class ActionGroupsController {
-
     @Autowired
     ActionsGroupsService actionsGroupsService;
-
-    @GetMapping()
-    public ResultContainer<List<ActionGroups>> getAllActionGroups(@RequestParam("page") int page,
-            @RequestParam("pageSize") int pageSize) {
-        var result = new ResultContainer<List<ActionGroups>>(null, new ArrayList<String>());
-
-        var groups = actionsGroupsService.getAllActionGroups(page, pageSize);
-
-        result.setResult(groups);
-
-        return result;
-    }
 
     @GetMapping("{id}")
     public ResultContainer<ActionGroups> getActionGroupById(@PathVariable("id") int id, HttpServletResponse response) {
@@ -100,5 +85,22 @@ public class ActionGroupsController {
         result.setResult(group);
 
         return result; 
+    }
+
+    @GetMapping("{id}/historics")
+    public ResultContainer<List<Historic>> getActionGroupHistoric(@PathVariable("id") int id,
+            @RequestParam("page") int page, HttpServletResponse response,
+            @RequestParam("pageSize") int pageSize) {
+        var result = new ResultContainer<List<Historic>>(null, new ArrayList<String>());
+
+        try {
+            var groups = actionsGroupsService.getActionGroupHistoric(id, page, pageSize);
+            result.setResult(groups);
+        } catch (NoSuchElementException e) {
+            response.setStatus(404);
+            result.addErrors("Not Found");
+        }
+
+        return result;
     }
 }

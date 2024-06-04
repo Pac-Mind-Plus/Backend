@@ -11,27 +11,22 @@ import org.springframework.stereotype.Service;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
 import catolica.mindplus.mindplus.entity.ActionGroups;
+import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
+import catolica.mindplus.mindplus.repositories.HistoricRepository;
 import catolica.mindplus.mindplus.repositories.UsersRepository;
 
 @Service
 public class ActionsGroupsService {
 
     @Autowired
-    UsersRepository userRepository;
-
-    @Autowired
     ActionsGroupsRepository repository;
 
-    public ActionGroups findActionGroupByUser(int userId, int id) throws NoSuchElementException {
-        var user = userRepository.findById(userId);
+    @Autowired
+    UsersRepository usersRepository;
 
-        if (user.isPresent()) {
-            return repository.findByOwnerAndId(user.get(), id).get();
-        }
-
-        throw new NoSuchElementException();
-    }
+    @Autowired
+    HistoricRepository historicRepository;
 
     public Optional<ActionGroups> getActionGroupById(int id) {
         return repository.findById(id);
@@ -45,8 +40,12 @@ public class ActionsGroupsService {
     }
 
     public ActionGroups insert(ActionsGroupsFormDto actionGroupForm) {
+        // TODO: Quando ter Keycloak pegar isso dinamicamente do token
+        var user = usersRepository.findByName("user").get();
+
         var actionGroup = new ActionGroups();
         actionGroup.setDescription(actionGroupForm.getDescription());
+        actionGroup.setOwner(user);
 
         return repository.save(actionGroup);
     }
@@ -72,6 +71,17 @@ public class ActionsGroupsService {
             repository.deleteById(id);
             return oldActionGroup.get();
         }
+
+        throw new NoSuchElementException();
+    }
+
+    public List<Historic> getActionGroupHistoric(int actionGroupId, int page, int pageSize) {
+        var actionGroup = repository.findById(actionGroupId);
+
+        if (actionGroup.isPresent()) {
+            PageRequest pageable = PageRequest.of(page, pageSize);
+            return this.historicRepository.findByActionGroup(actionGroup.get(), pageable);
+        };
 
         throw new NoSuchElementException();
     }

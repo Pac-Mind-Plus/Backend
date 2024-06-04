@@ -14,6 +14,4 @@ import catolica.mindplus.mindplus.entity.User;
 @Repository
 public interface ActionsGroupsRepository extends CrudRepository<ActionGroups, Integer>, PagingAndSortingRepository<ActionGroups, Integer> {
      List<ActionGroups> findByOwner(User user, Pageable pageable);
-
-     Optional<ActionGroups> findByOwnerAndId(User user, int id);
 };

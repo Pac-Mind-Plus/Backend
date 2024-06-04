@@ -13,6 +13,7 @@ import catolica.mindplus.mindplus.dtos.HistoricFormDto;
 import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
 import catolica.mindplus.mindplus.repositories.HistoricRepository;
+import catolica.mindplus.mindplus.repositories.UsersRepository;
 
 @Service
 public class HistoricService {
@@ -23,23 +24,17 @@ public class HistoricService {
     @Autowired
     HistoricRepository repository;
 
+    @Autowired
+    UsersRepository usersRepository;
+
     public Optional<Historic> gethistoricById(int id) {
         return repository.findById(id);
     }
 
-    public List<Historic> getAllByActionGroup(int actionGroupId, int page, int pageSize) {
-        var actionGroup = actionGroupRepository.findById(actionGroupId);
-
-        if (actionGroup.isPresent()) {
-            PageRequest pageable = PageRequest.of(page, pageSize);
-            return this.repository.findByActionGroup(actionGroup.get(), pageable);
-        }
-        ;
-
-        throw new NoSuchElementException();
-    }
-
     public Historic insertToActionGroup(int actionGroupId, HistoricFormDto historicForm) {
+        // TODO: Quando ter Keycloak pegar isso dinamicamente do token
+        var user = usersRepository.findByName("user").get();
+
         var actionGroup = actionGroupRepository.findById(actionGroupId);
 
         if (actionGroup.isPresent()) {
@@ -48,6 +43,7 @@ public class HistoricService {
             historic.setReward(historicForm.getReward());
             historic.setDate(historicForm.getDate());
             historic.setActionGroup(actionGroup.get());
+            historic.setOwner(user);
 
             return repository.save(historic);
         };

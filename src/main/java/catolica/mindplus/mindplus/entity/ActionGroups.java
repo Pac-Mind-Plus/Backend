@@ -45,4 +45,16 @@ public class ActionGroups {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public Set<Historic> getHistorics() {
+		return historics;
+	}
+
+	public void setHistorics(Set<Historic> historics) {
+		this.historics = historics;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 }
