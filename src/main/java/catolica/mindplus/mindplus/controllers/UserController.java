@@ -42,7 +42,7 @@ public class UserController {
         return result;
     }
 
-    @GetMapping("{id}/historics")
+    @GetMapping("{id}/diarys")
     public ResultContainer<List<Historic>> getUserHistoric(@PathVariable("id") int id,
             @RequestParam("page") int page, HttpServletResponse response,
             @RequestParam("pageSize") int pageSize) {

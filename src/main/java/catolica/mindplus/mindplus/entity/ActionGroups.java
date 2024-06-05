@@ -2,6 +2,7 @@ package catolica.mindplus.mindplus.entity;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,10 +24,10 @@ public class ActionGroups {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "actionGroup")
+    @OneToMany(mappedBy = "actionGroup", cascade = CascadeType.ALL)
     private Set<Historic> historics;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     User owner;
 
@@ -44,10 +45,6 @@ public class ActionGroups {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Set<Historic> getHistorics() {
-		return historics;
 	}
 
 	public void setHistorics(Set<Historic> historics) {

@@ -32,13 +32,6 @@ public class ActionsGroupsService {
         return repository.findById(id);
     }
 
-    public List<ActionGroups> getAllActionGroups(int page, int pageSize) {
-        PageRequest pageable = PageRequest.of(page, pageSize);
-        Page<ActionGroups> actionGroups = this.repository.findAll(pageable);
-
-        return actionGroups.toList();
-    }
-
     public ActionGroups insert(ActionsGroupsFormDto actionGroupForm) {
         // TODO: Quando ter Keycloak pegar isso dinamicamente do token
         var user = usersRepository.findByName("user").get();
@@ -51,38 +44,30 @@ public class ActionsGroupsService {
     }
 
     public ActionGroups update(int id, ActionsGroupsFormDto actionGroupForm) {
-        var oldActionGroup = this.getActionGroupById(id);
+        // TODO: Quando ter Keycloak pegar isso dinamicamente do token;
+        var user = usersRepository.findByName("user").get();
 
-        if (oldActionGroup.isPresent()) {
-            var actionGroup = new ActionGroups();
-            actionGroup.setDescription(actionGroupForm.getDescription());
-            actionGroup.setId(id);
+        // TODO: Check if user is owner of the item before updating;
 
-            return repository.save(actionGroup);
-        }
+        var oldActionGroup = this.getActionGroupById(id).get();
+        oldActionGroup.setDescription(actionGroupForm.getDescription());
 
-        throw new NoSuchElementException();
+        return repository.save(oldActionGroup);
     }
 
     public ActionGroups deleteActionGroupById(int id) {
-        var oldActionGroup = this.getActionGroupById(id);
+        var oldActionGroup = this.getActionGroupById(id).get();
 
-        if (oldActionGroup.isPresent()) {
-            repository.deleteById(id);
-            return oldActionGroup.get();
-        }
-
-        throw new NoSuchElementException();
+        // TODO: Check if user is owner of the item before deleting;
+        
+        repository.deleteById(id);
+        return oldActionGroup;
     }
 
     public List<Historic> getActionGroupHistoric(int actionGroupId, int page, int pageSize) {
-        var actionGroup = repository.findById(actionGroupId);
+        var actionGroup = repository.findById(actionGroupId).get();
 
-        if (actionGroup.isPresent()) {
-            PageRequest pageable = PageRequest.of(page, pageSize);
-            return this.historicRepository.findByActionGroup(actionGroup.get(), pageable);
-        };
-
-        throw new NoSuchElementException();
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        return this.historicRepository.findByActionGroup(actionGroup, pageable);
     }
 }

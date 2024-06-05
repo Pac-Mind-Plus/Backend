@@ -2,6 +2,7 @@ package catolica.mindplus.mindplus.entity;
 
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,11 +29,11 @@ public class Historic {
     @Column(name = "date")
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "actions_group_id", nullable = false)
     ActionGroups actionGroup;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     User owner;
 
@@ -66,10 +67,6 @@ public class Historic {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-	public ActionGroups getActionGroup() {
-		return actionGroup;
 	}
 
 	public void setActionGroup(ActionGroups actionGroup) {

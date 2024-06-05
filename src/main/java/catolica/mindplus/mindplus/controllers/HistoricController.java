@@ -23,7 +23,7 @@ import catolica.mindplus.mindplus.services.HistoricService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(path = "/actiongroups/{actiongroup_id}/historics")
+@RequestMapping(path = "/actiongroups/{actiongroup_id}/diarys")
 public class HistoricController {
 
     @Autowired
@@ -75,5 +75,22 @@ public class HistoricController {
         }
 
         return result; 
+    }
+
+    @GetMapping()
+    public ResultContainer<List<Historic>> getActionGroupHistoric(@PathVariable("actiongroup_id") int id,
+            @RequestParam("page") int page, HttpServletResponse response,
+            @RequestParam("pageSize") int pageSize) {
+        var result = new ResultContainer<List<Historic>>(null, new ArrayList<String>());
+
+        try {
+            var groups = actionsGroupsService.getActionGroupHistoric(id, page, pageSize);
+            result.setResult(groups);
+        } catch (NoSuchElementException e) {
+            response.setStatus(404);
+            result.addErrors("Not Found");
+        }
+
+        return result;
     }
 }

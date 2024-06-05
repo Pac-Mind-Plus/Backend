@@ -1,12 +1,8 @@
 package catolica.mindplus.mindplus.services;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import catolica.mindplus.mindplus.dtos.HistoricFormDto;
@@ -35,53 +31,39 @@ public class HistoricService {
         // TODO: Quando ter Keycloak pegar isso dinamicamente do token
         var user = usersRepository.findByName("user").get();
 
-        var actionGroup = actionGroupRepository.findById(actionGroupId);
+        // TODO: Check if user is owner of the actiongroup before inserting;
 
-        if (actionGroup.isPresent()) {
-            var historic = new Historic();
-            historic.setWeight(historicForm.getWeight());
-            historic.setReward(historicForm.getReward());
-            historic.setDate(historicForm.getDate());
-            historic.setActionGroup(actionGroup.get());
-            historic.setOwner(user);
+        var actionGroup = actionGroupRepository.findById(actionGroupId).get();
 
-            return repository.save(historic);
-        };
+        var historic = new Historic();
+        historic.setWeight(historicForm.getWeight());
+        historic.setReward(historicForm.getReward());
+        historic.setDate(historicForm.getDate());
+        historic.setActionGroup(actionGroup);
+        historic.setOwner(user);
 
-        throw new NoSuchElementException();
+        return repository.save(historic);
     }
 
     public Historic update(int actionGroupId, int id, HistoricFormDto historicForm) {
-        var actionGroup = actionGroupRepository.findById(actionGroupId);
+        // TODO: Check if user is owner of the actiongroup before inserting;
+        
+        var oldhistoric = this.gethistoricById(id).get();
 
-        if (actionGroup.isPresent()) {
-            var oldhistoric = this.gethistoricById(id);
+        var oldHistoric = oldhistoric;
+        oldHistoric.setWeight(historicForm.getWeight());
+        oldHistoric.setReward(historicForm.getReward());
+        oldHistoric.setDate(historicForm.getDate());
 
-            if (oldhistoric.isPresent()) {
-                var oldHistoric = oldhistoric.get();
-                oldHistoric.setWeight(historicForm.getWeight());
-                oldHistoric.setReward(historicForm.getReward());
-                oldHistoric.setDate(historicForm.getDate());
-
-                return repository.save(oldHistoric);
-            }
-        }
-
-        throw new NoSuchElementException();
+        return repository.save(oldHistoric);
     }
 
     public Historic deletehistoricById(int actionGroupId, int id) {
-        var actionGroup = actionGroupRepository.findById(actionGroupId);
+        // TODO: Check if user is owner of the actiongroup before inserting;
+        
+        var oldhistoric = this.gethistoricById(id).get();
 
-        if (actionGroup.isPresent()) {
-            var oldhistoric = this.gethistoricById(id);
-
-            if (oldhistoric.isPresent()) {
-                repository.deleteById(id);
-                return oldhistoric.get();
-            }
-        }
-
-        throw new NoSuchElementException();
+        repository.deleteById(id);
+        return oldhistoric;
     }
 }
