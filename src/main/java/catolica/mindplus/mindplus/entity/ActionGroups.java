@@ -27,7 +27,7 @@ public class ActionGroups {
     @OneToMany(mappedBy = "actionGroup", cascade = CascadeType.ALL)
     private Set<Historic> historics;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User owner;
 
