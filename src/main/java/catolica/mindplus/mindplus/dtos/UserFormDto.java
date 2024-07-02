@@ -1,4 +1,9 @@
-package catolica.mindplus.mindplus.dtos;
+package catolica.mindplus.mindplus.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 public class UserFormDto {
     private String name;
