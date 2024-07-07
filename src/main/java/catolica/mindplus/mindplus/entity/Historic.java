@@ -32,9 +32,8 @@ public class Historic {
     @JoinColumn(name = "actions_group_id", nullable = false)
     ActionGroups actionGroup;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User owner;
+    @Column(name = "user_id", nullable = false)
+    String userId;
 
 	public int getId() {
 		return id;
@@ -72,7 +71,11 @@ public class Historic {
 		this.actionGroup = actionGroup;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public String getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }
