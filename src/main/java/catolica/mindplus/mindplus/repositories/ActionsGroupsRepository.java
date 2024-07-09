@@ -8,9 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import catolica.mindplus.mindplus.entity.ActionGroups;
-import catolica.mindplus.mindplus.entity.User;
 
 @Repository
 public interface ActionsGroupsRepository extends CrudRepository<ActionGroups, Integer>, PagingAndSortingRepository<ActionGroups, Integer> {
-     List<ActionGroups> findByOwner(User user, Pageable pageable);
+     List<ActionGroups> findByUserId(String userId, Pageable pageable);
 };

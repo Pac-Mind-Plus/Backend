@@ -1,12 +1,13 @@
 package catolica.mindplus.mindplus.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import catolica.mindplus.mindplus.dtos.ActionsGroupsFormDto;
@@ -14,7 +15,6 @@ import catolica.mindplus.mindplus.entity.ActionGroups;
 import catolica.mindplus.mindplus.entity.Historic;
 import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
 import catolica.mindplus.mindplus.repositories.HistoricRepository;
-import catolica.mindplus.mindplus.repositories.UsersRepository;
 
 @Service
 public class ActionsGroupsService {
@@ -23,42 +23,36 @@ public class ActionsGroupsService {
     ActionsGroupsRepository repository;
 
     @Autowired
-    UsersRepository usersRepository;
-
-    @Autowired
     HistoricRepository historicRepository;
 
     public Optional<ActionGroups> getActionGroupById(int id) {
         return repository.findById(id);
     }
 
-    public ActionGroups insert(ActionsGroupsFormDto actionGroupForm) {
-        // TODO: Quando ter Keycloak pegar isso dinamicamente do token
-        var user = usersRepository.findByName("user").get();
+    public List<ActionGroups> getUserActionGroups(String id) {
+        return repository.findByUserId(id, null);
+    }
 
+    public ActionGroups insert(ActionsGroupsFormDto actionGroupForm) {
         var actionGroup = new ActionGroups();
         actionGroup.setDescription(actionGroupForm.getDescription());
-        actionGroup.setOwner(user);
-
+        String userId = getUserIdFromToken();
+        actionGroup.setUserId(userId);
+    
         return repository.save(actionGroup);
     }
 
     public ActionGroups update(int id, ActionsGroupsFormDto actionGroupForm) {
-        // TODO: Quando ter Keycloak pegar isso dinamicamente do token;
-        var user = usersRepository.findByName("user").get();
-
-        // TODO: Check if user is owner of the item before updating;
-
         var oldActionGroup = this.getActionGroupById(id).get();
+        String userId = getUserIdFromToken(); 
         oldActionGroup.setDescription(actionGroupForm.getDescription());
+        oldActionGroup.setUserId(userId);
 
         return repository.save(oldActionGroup);
     }
 
     public ActionGroups deleteActionGroupById(int id) {
         var oldActionGroup = this.getActionGroupById(id).get();
-
-        // TODO: Check if user is owner of the item before deleting;
         
         repository.deleteById(id);
         return oldActionGroup;
@@ -69,5 +63,12 @@ public class ActionsGroupsService {
 
         PageRequest pageable = PageRequest.of(page, pageSize);
         return this.historicRepository.findByActionGroup(actionGroup, pageable);
+    }
+
+
+    private String getUserIdFromToken() {
+        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = authenticationToken.getToken();
+        return jwt.getSubject();
     }
 }

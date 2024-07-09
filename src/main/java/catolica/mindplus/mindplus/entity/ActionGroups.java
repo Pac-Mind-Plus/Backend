@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -27,9 +25,8 @@ public class ActionGroups {
     @OneToMany(mappedBy = "actionGroup", cascade = CascadeType.ALL)
     private Set<Historic> historics;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User owner;
+    @Column(name = "user_id", nullable = false)
+    private String userId;
 
 	public int getId() {
 		return id;
@@ -51,7 +48,11 @@ public class ActionGroups {
 		this.historics = historics;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public String getUserId() {
+        return userId;
+    }
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }
