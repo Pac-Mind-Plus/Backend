@@ -7,7 +7,9 @@ public class HistoricFormDto {
 
     private String reward;
 
-    private Date date;
+    private Date startDate;
+
+	private Date endDate;
 
 	public double getWeight() {
 		return weight;
@@ -25,11 +27,19 @@ public class HistoricFormDto {
 		this.reward = reward;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }

@@ -37,7 +37,8 @@ public class HistoricService {
         var historic = new Historic();
         historic.setWeight(historicForm.getWeight());
         historic.setReward(historicForm.getReward());
-        historic.setDate(historicForm.getDate());
+        historic.setStartDate(historicForm.getStartDate());
+        historic.setEndDate(historicForm.getEndDate());
         historic.setActionGroup(actionGroup);
         historic.setUserId(userId);
 
@@ -50,7 +51,8 @@ public class HistoricService {
         var oldHistoric = oldhistoric;
         oldHistoric.setWeight(historicForm.getWeight());
         oldHistoric.setReward(historicForm.getReward());
-        oldHistoric.setDate(historicForm.getDate());
+        oldHistoric.setStartDate(historicForm.getStartDate());
+        oldHistoric.setEndDate(historicForm.getEndDate());
         oldHistoric.setUserId(userId);
 
         return repository.save(oldHistoric);

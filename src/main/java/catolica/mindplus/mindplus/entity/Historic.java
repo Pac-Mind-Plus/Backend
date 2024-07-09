@@ -25,8 +25,11 @@ public class Historic {
     @Column(name = "reward")
     private String reward;
 
-    @Column(name = "date")
-    private Date date;
+    @Column(name = "startDate")
+    private Date startDate;
+
+	@Column(name = "endDate")
+    private Date endDate;
 
     @ManyToOne
     @JoinColumn(name = "actions_group_id", nullable = false)
@@ -59,12 +62,20 @@ public class Historic {
 		this.reward = reward;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public void setActionGroup(ActionGroups actionGroup) {
