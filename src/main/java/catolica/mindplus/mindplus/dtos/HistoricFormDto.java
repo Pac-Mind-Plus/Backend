@@ -1,15 +1,15 @@
 package catolica.mindplus.mindplus.dtos;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class HistoricFormDto {
     private double weight;
 
     private String reward;
 
-    private Date startDate;
+    private Timestamp startDate;
 
-	private Date endDate;
+	private Timestamp endDate;
 
 	public double getWeight() {
 		return weight;
@@ -27,19 +27,19 @@ public class HistoricFormDto {
 		this.reward = reward;
 	}
 
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 }

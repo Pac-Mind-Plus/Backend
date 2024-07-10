@@ -1,6 +1,6 @@
 package catolica.mindplus.mindplus.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,10 +26,10 @@ public class Historic {
     private String reward;
 
     @Column(name = "startDate")
-    private Date startDate;
+    private Timestamp startDate;
 
 	@Column(name = "endDate")
-    private Date endDate;
+    private Timestamp endDate;
 
     @ManyToOne
     @JoinColumn(name = "actions_group_id", nullable = false)
@@ -62,19 +62,19 @@ public class Historic {
 		this.reward = reward;
 	}
 
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 
