@@ -1,11 +1,7 @@
 package catolica.mindplus.mindplus.services;
 
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import catolica.mindplus.mindplus.entity.ActionGroups;
-import catolica.mindplus.mindplus.entity.Historic;
-import catolica.mindplus.mindplus.repositories.ActionsGroupsRepository;
-import catolica.mindplus.mindplus.repositories.HistoricRepository;
-import io.swagger.v3.core.util.Json;
 
 @Service
 public class UserService {

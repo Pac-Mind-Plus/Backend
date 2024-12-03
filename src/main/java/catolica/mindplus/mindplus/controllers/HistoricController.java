@@ -34,6 +34,23 @@ public class HistoricController {
     @Autowired
     HistoricService historicService;
 
+    @GetMapping()
+    public ResultContainer<List<Historic>> getActionGroupHistoric(@PathVariable("actiongroup_id") int id,
+            @RequestParam("page") int page, HttpServletResponse response,
+            @RequestParam("pageSize") int pageSize) {
+        var result = new ResultContainer<List<Historic>>(null, new ArrayList<String>());
+
+        try {
+            var groups = actionsGroupsService.getActionGroupHistoric(id, page, pageSize);
+            result.setResult(groups);
+        } catch (NoSuchElementException e) {
+            response.setStatus(404);
+            result.addErrors("Not Found");
+        }
+
+        return result;
+    }
+
     @PostMapping()
     public ResultContainer<Historic> insertActionGroupHistoric(@PathVariable("actiongroup_id") int actiongroupId, @RequestBody HistoricFormDto historicFormDto, HttpServletResponse response) {
         var result = new ResultContainer<Historic>(null, new ArrayList<String>());
@@ -77,22 +94,5 @@ public class HistoricController {
         }
 
         return result; 
-    }
-
-    @GetMapping()
-    public ResultContainer<List<Historic>> getActionGroupHistoric(@PathVariable("actiongroup_id") int id,
-            @RequestParam("page") int page, HttpServletResponse response,
-            @RequestParam("pageSize") int pageSize) {
-        var result = new ResultContainer<List<Historic>>(null, new ArrayList<String>());
-
-        try {
-            var groups = actionsGroupsService.getActionGroupHistoric(id, page, pageSize);
-            result.setResult(groups);
-        } catch (NoSuchElementException e) {
-            response.setStatus(404);
-            result.addErrors("Not Found");
-        }
-
-        return result;
     }
 }
